@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+motor               # Async MongoDB driver
+pydantic
+python-dotenv       # Environment variables
+python-jose         # JWT
+passlib[bcrypt]     # Password hashing
+email-validator     # Contact form
+python-multipart    # Media uploads
+pytest              # Testing
+mongomock 
+pymongo          # Mock Mongo for tests
