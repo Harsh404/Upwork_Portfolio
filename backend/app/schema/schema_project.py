@@ -10,3 +10,8 @@ class ProjectCreate(BaseModel):
 
 class ProjectResponse(ProjectCreate):
     id: str
+    average_rating: float = 0.0
+    ratings_count: int = 0
+
+class ProjectRating(BaseModel):
+    rating: int  # 1–5

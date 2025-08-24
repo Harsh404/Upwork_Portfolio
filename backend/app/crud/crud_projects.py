@@ -31,3 +31,22 @@ async def update_project(project_id: str, data: dict):
 async def delete_project(project_id: str):
     result = await get_collection().delete_one({"_id": ObjectId(project_id)})
     return result.deleted_count
+
+
+async def add_rating(project_id: str, rating: int):
+    project = await get_project_by_id(project_id)
+    if not project:
+        return None
+
+    # Initialize if missing
+    if "ratings" not in project:
+        project["ratings"] = []
+
+    project["ratings"].append(rating)
+
+    await get_collection().update_one(
+        {"_id": ObjectId(project_id)},
+        {"$set": {"ratings": project["ratings"]}}
+    )
+
+    return project
