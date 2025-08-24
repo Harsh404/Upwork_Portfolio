@@ -17,5 +17,5 @@ class UserModel(BaseModel):
     username: str
     email: EmailStr
     hashed_password: str
-    role: str = "admin"  # "admin" or "viewer"
+    role: str   # "admin" or "viewer"
     is_active: bool = True
