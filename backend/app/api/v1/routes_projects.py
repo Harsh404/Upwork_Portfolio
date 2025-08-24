@@ -1,5 +1,6 @@
+from app.services.rating_service import calculate_average
 from fastapi import APIRouter, HTTPException, Depends
-from app.schema.schema_project import ProjectCreate, ProjectResponse
+from app.schema.schema_project import ProjectCreate, ProjectRating, ProjectResponse
 from app.crud import crud_projects
 from app.api.v1.routes_user import get_current_admin  # <- add
 
@@ -29,6 +30,27 @@ async def update_project(project_id: str, project: ProjectCreate):
     if not updated:
         raise HTTPException(status_code=404, detail="Project not found")
     return {"status": "success", "updated_count": updated}
+
+
+@router.post("/{project_id}/rate", response_model=ProjectResponse)
+async def rate_project(project_id: str, rating: ProjectRating):
+    project = await crud_projects.add_rating(project_id, rating.rating)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    avg_info = calculate_average(project.get("ratings", []))
+
+    return {
+        "id": str(project["_id"]),
+        "title": project["title"],
+        "description": project["description"],
+        "tech_stack": project["tech_stack"],
+        "live_url": project.get("live_url"),
+        "repo_url": project.get("repo_url"),
+        "average_rating": avg_info["average"],
+        "ratings_count": avg_info["count"],
+    }
+
 
 @router.delete("/{project_id}", response_model=dict, dependencies=[Depends(get_current_admin)])
 async def delete_project(project_id: str):
