@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from app.core.config import settings
 from app.db.mongodb import connect_to_mongo, close_mongo_connection
-from app.api.v1 import routes_projects, routes_blog, routes_products
+from app.api.v1 import routes_projects, routes_blog, routes_products,routes_hero
 from app.api.v1 import routes_user
 from app.crud import crud_user
 
@@ -24,3 +24,4 @@ app.include_router(routes_user.router, prefix=settings.API_V1_STR)
 app.include_router(routes_projects.router, prefix=settings.API_V1_STR)
 app.include_router(routes_blog.router, prefix=settings.API_V1_STR)
 app.include_router(routes_products.router, prefix=settings.API_V1_STR)
+app.include_router(routes_hero.router, prefix=settings.API_V1_STR)
