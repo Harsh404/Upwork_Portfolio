@@ -2,7 +2,7 @@ from app.db import mongodb
 from app.schema.schema_project import ProjectCreate
 from bson import ObjectId
 
-PROJECTS_COLLECTION = "project"
+PROJECTS_COLLECTION = "projects"
 
 def get_collection():
     if mongodb.db is None:

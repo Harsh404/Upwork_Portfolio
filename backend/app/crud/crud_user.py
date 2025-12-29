@@ -24,7 +24,7 @@ async def get_by_username(username: str) -> Optional[dict]:
 async def get_by_id(user_id: str) -> Optional[dict]:
     return await _col().find_one({"_id": ObjectId(user_id)})
 
-async def create_user(data: UserCreate, role: str = "admin") -> str:
+async def create_user(data: UserCreate, role: str) -> str:
     doc = {
         "username": data.username,
         "email": data.email,
