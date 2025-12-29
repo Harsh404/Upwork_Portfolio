@@ -7,8 +7,8 @@ db = None
 async def connect_to_mongo():
     global client, db
     if client is None:
-        client = AsyncIOMotorClient(settings.MONGODB_URI)
-        db = client[settings.DATABASE_NAME]
+        client = AsyncIOMotorClient(settings.mongo_uri)
+        db = client[settings.database_name]
         # test connection
         await db.command("ping")
         print("✅ Connected to MongoDB Atlas")
