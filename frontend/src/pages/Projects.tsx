@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import api from '../api/api';
 
 interface Project {
   id: string;
@@ -17,7 +18,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/projects`);
+        const response = await api.get(`/projects/all`);
         setProjects(response.data);
       } catch (error) {
         console.error('Error fetching projects:', error);

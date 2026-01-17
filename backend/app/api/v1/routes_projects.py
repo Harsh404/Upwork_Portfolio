@@ -6,13 +6,19 @@ from app.api.v1.routes_user import get_current_admin  # <- add
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
 @router.post("/", response_model=str, dependencies=[Depends(get_current_admin)])
-async def add_project(project: ProjectCreate):
-    project_id = await crud_projects.create_project(project)
+async def add_project(project: ProjectCreate, user:dict = Depends(get_current_admin)):
+    project_id = await crud_projects.create_project(project, user.user_id)
     return project_id
 
+@router.get("/all", response_model=list[ProjectResponse])
+async def list_all_projects():
+    projects = await crud_projects.get_all_projects_user()
+    return [{**p, "id": str(p["_id"]), "_id": str(p["_id"])} for p in projects]
+
 @router.get("/", response_model=list[ProjectResponse])
-async def list_projects():
-    projects = await crud_projects.get_all_projects()
+async def list_projects(user:dict = Depends(get_current_admin)):
+    user_id = user.user_id
+    projects = await crud_projects.get_all_projects(user_id)
     return [{**p, "id": str(p["_id"]), "_id": str(p["_id"])} for p in projects]
 
 @router.get("/{project_id}", response_model=ProjectResponse)

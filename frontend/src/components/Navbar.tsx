@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../auth/AuthContext';
 
 const Navbar = () => {
   const { isAuthenticated, isAdmin, logout } = useAuth();
@@ -13,7 +13,9 @@ const Navbar = () => {
           </Link>
           <div className="flex space-x-4">
             <Link to="/" className="text-gray-600 hover:text-gray-800">Home</Link>
+            {isAuthenticated && (
             <Link to="/projects" className="text-gray-600 hover:text-gray-800">Projects</Link>
+            )}
             {isAuthenticated && (
               <Link to="/blogs" className="text-gray-600 hover:text-gray-800">Blogs</Link>
             )}

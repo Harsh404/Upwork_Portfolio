@@ -8,12 +8,17 @@ router = APIRouter(prefix="/blogs", tags=["Blogs"])
 
 @router.post("/", response_model=str, dependencies=[Depends(get_current_admin)])
 async def create_blog(blog: BlogCreate, user: TokenData = Depends(get_current_admin)):
-    blog_id = await crud_blog.create_blog(blog, user.user_id)
+    blog_id = await crud_blog.create_blog(blog, user.username)
     return blog_id
 
 @router.get("/", response_model=list[BlogResponse], dependencies=[Depends(get_current_user)])
 async def list_blogs():
     blogs = await crud_blog.get_all_blogs()
+    return [{**b, "id": str(b["_id"])} for b in blogs]
+
+@router.get("/admin", response_model=list[BlogResponse], dependencies=[Depends(get_current_admin)])
+async def list_blogs_admin():
+    blogs = await crud_blog.get_all_blogs_admin()
     return [{**b, "id": str(b["_id"])} for b in blogs]
 
 @router.get("/{blog_id}", response_model=BlogResponse, dependencies=[Depends(get_current_user)])

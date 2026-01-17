@@ -11,9 +11,9 @@ def get_collection():
         raise RuntimeError("Database not initialized. Did you connect?")
     return mongodb.db[BLOGS_COLLECTION]
 
-async def create_blog(blog: BlogCreate, author_id: str):
+async def create_blog(blog: BlogCreate, author_name: str):
     new_blog = blog.dict()
-    new_blog["author"] = author_id
+    new_blog["author"] = author_name
     new_blog["created_at"] = datetime.utcnow()
     new_blog["updated_at"] = datetime.utcnow()
     result = await get_collection().insert_one(new_blog)
@@ -22,6 +22,10 @@ async def create_blog(blog: BlogCreate, author_id: str):
 async def get_all_blogs(published_only: bool = True):
     query = {"is_published": True} if published_only else {}
     blogs = await get_collection().find(query).sort("created_at", -1).to_list(100)
+    return blogs
+
+async def get_all_blogs_admin():
+    blogs = await get_collection().find({}).sort("created_at", -1).to_list(100)
     return blogs
 
 async def get_blog_by_id(blog_id: str):
